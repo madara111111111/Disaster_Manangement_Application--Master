@@ -1,3 +1,23 @@
-git add codemagic.yaml
-git commit -m 'Add first workflow'
-git push
+workflows:
+  android-workflow:
+    name: Android Workflow
+    environment:
+      groups:
+        - keystore_credentials
+    scripts:
+      - name: Set up environment
+        script: |
+          echo "Setting up environment..."
+          sudo apt-get update
+          sudo apt-get install -y openjdk-11-jdk
+      - name: Build Android app
+        script: |
+          echo "Building Android app..."
+          chmod +x gradlew
+          ./gradlew assembleRelease
+    artifacts:
+      - app/build/outputs/apk/release/*.apk
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
